@@ -1,0 +1,9 @@
+com\example\KANBANBOARD\controller\ColumnController.class
+com\example\KANBANBOARD\repository\ColumnRepository.class
+com\example\KANBANBOARD\repository\TaskRepository.class
+com\example\KANBANBOARD\model\KanbanColumn.class
+com\example\KANBANBOARD\service\TaskService.class
+com\example\KANBANBOARD\KanbanboardApplication.class
+com\example\KANBANBOARD\controller\TaskController.class
+com\example\KANBANBOARD\model\Task.class
+com\example\KANBANBOARD\service\ColumnService.class
