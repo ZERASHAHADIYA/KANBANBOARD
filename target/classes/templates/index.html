@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kanban Board</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1>Kanban Board</h1>
+
+<div>
+    <h2>Columns</h2>
+    <div th:each="column : ${columns}">
+        <h3 th:text="${column.name}"></h3>
+        <ul>
+            <li th:each="task : ${column.tasks}" th:text="${task.title}"></li>
+        </ul>
+    </div>
+</div>
+
+<div>
+    <h2>Add Task</h2>
+    <form th:action="@{/tasks/add}" method="post">
+        <input type="text" name="title" placeholder="Title" required><br>
+        <input type="text" name="description" placeholder="Description" required><br>
+        <select name="columnId">
+            <option th:each="column : ${columns}" th:value="${column.columnId}" th:text="${column.name}"></option>
+        </select><br>
+        <button type="submit">Add Task</button>
+    </form>
+</div>
+</body>
+</html>
