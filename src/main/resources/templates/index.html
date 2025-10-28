@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -31,3 +32,180 @@
 </div>
 </body>
 </html>
+=======
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board - Task Management</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40">
+                    <rect x="2" y="2" width="36" height="36" rx="8" fill="url(#gradient)"/>
+                    <rect x="10" y="10" width="8" height="20" rx="2" fill="white" opacity="0.9"/>
+                    <rect x="22" y="10" width="8" height="12" rx="2" fill="white" opacity="0.7"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea"/>
+                            <stop offset="100%" style="stop-color:#764ba2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>Kanban Board</h1>
+            </div>
+            <button class="btn btn-primary" onclick="openAddTaskModal()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Add New Task
+            </button>
+        </div>
+    </header>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+                <svg width="24" height="24" fill="none" stroke="white" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+            </div>
+            <div class="stat-info">
+                <h3 th:text="${totalTasks}">0</h3>
+                <p>Total Tasks</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)">
+                <svg width="24" height="24" fill="none" stroke="white" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div class="stat-info">
+                <h3 th:text="${inProgressTasks}">0</h3>
+                <p>In Progress</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)">
+                <svg width="24" height="24" fill="none" stroke="white" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div class="stat-info">
+                <h3 th:text="${completedTasks}">0</h3>
+                <p>Completed</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kanban Board -->
+    <div class="kanban-board">
+        <div th:each="column : ${columns}" class="kanban-column">
+            <div class="column-header">
+                <div class="column-title">
+                    <span th:text="${column.name}">Column Name</span>
+                    <span class="task-count" th:text="${column.tasks.size()}">0</span>
+                </div>
+            </div>
+
+            <div class="tasks-container">
+                <div th:each="task : ${column.tasks}" class="task-card" th:classappend="${task.priority != null ? 'priority-' + task.priority.toLowerCase() : 'priority-low'}">
+                    <div class="task-header">
+                        <h4 class="task-title" th:text="${task.title}">Task Title</h4>
+                        <span class="priority-badge" th:classappend="${task.priority != null ? 'priority-' + task.priority.toLowerCase() : 'priority-low'}" th:text="${task.priority}">High</span>
+                    </div>
+
+                    <p class="task-description" th:text="${task.description}">Task description goes here</p>
+
+                    <div class="task-footer">
+                        <div class="task-meta">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span th:text="${task.createdAt}">Date</span>
+                        </div>
+                        <div class="task-actions">
+                            <button class="btn-icon" th:onclick="'editTask(' + ${task.taskId} + ')'">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
+                            <button class="btn-icon btn-delete" th:onclick="'deleteTask(' + ${task.taskId} + ')'">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${column.tasks.isEmpty()}" class="empty-state">
+                    <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <p>No tasks yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Task Modal -->
+<div id="taskModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Add New Task</h2>
+            <button class="btn-close" onclick="closeTaskModal()">&times;</button>
+        </div>
+
+        <form id="taskForm" th:action="@{/tasks/save}" method="post">
+            <input type="hidden" id="taskId" name="taskId">
+
+            <div class="form-group">
+                <label for="title">Task Title *</label>
+                <input type="text" id="title" name="title" placeholder="Enter task title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4" placeholder="Enter task description"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="priority">Priority</label>
+                    <select id="priority" name="priority">
+                        <option value="Low">Low</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="columnId">Column</label>
+                    <select id="columnId" name="columnId">
+                        <option th:each="col : ${columns}" th:value="${col.columnId}" th:text="${col.name}">Column</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeTaskModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Task</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>
+>>>>>>> 5a5dcd7b6e713ac09b15a3a7e6b00f6f0c371569
